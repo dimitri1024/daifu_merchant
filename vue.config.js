@@ -150,7 +150,8 @@ module.exports = {
         // target: "https://lua.nwcvrls.cn", // 正式环境
         // target: "http://mct.x4r.cc/", // 正式环境
         // target: "http://merchantdev.x4r.cc/", // 正式环境
-        target: "http://apadmin.x4r.cc/", // 正式环境
+        // target: "http://apadmin.x4r.cc/", // 正式环境
+        target: "http://127.0.0.1:83",
         changeOrigin: true,
         secure: false,
         pathRewrite: {
