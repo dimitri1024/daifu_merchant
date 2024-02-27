@@ -99,7 +99,7 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="120">
             <template #default="scope">
-             <a :href="'/merchant/excel/redirect?id=' + scope.row.id + '&t=' + token" class="table-down" target="_blank">下载</a>
+             <a :href="'/proxy/merchant/excel/redirect?id=' + scope.row.id + '&t=' + token" class="table-down" target="_blank">下载</a>
             </template>
           </el-table-column>
         </el-table>
@@ -331,9 +331,9 @@ export default {
 
     const isShowTable = () => {
       getRechargeTable({ flag: 1 }).then(res => {
-        if (res.status) {
-          if (Array.isArray(res.data)) {
-            state.rechargeList = res.data || [];
+        if (res.status && res.data.d) {
+          if (Array.isArray(res.data.d)) {
+            state.rechargeList = res.data.d || [];
           }
         }
       });

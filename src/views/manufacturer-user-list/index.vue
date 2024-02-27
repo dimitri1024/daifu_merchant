@@ -42,9 +42,18 @@
             </tr>
 
             <tr>
+              <td bgcolor="#f3f3f4" class="text-center">自动提现开关</td>
+              <td>{{ userInfo.auto_withdraw ? '开启' : '关闭' }}</td>
+              <td bgcolor="#f3f3f4" class="text-center">自动提现总额度</td>
+              <td>{{ userInfo.auto_withdraw_limit }}</td>
+              <td bgcolor="#f3f3f4" class="text-center">自动提现每天额度</td>
+              <td>{{ userInfo.auto_withdraw_daily_limit }}</td>
+            </tr>
+
+            <tr>
               <td bgcolor="#f3f3f4" class="text-center">接口文档下载</td>
               <td>
-                <a href="#" style="color: #337ab7">下载</a>
+                <a href="../proxy/documents/readme.pdf" style="color: #337ab7">下载</a>
               </td>
               <td bgcolor="#f3f3f4" class="text-center">商户秘钥</td>
               <td>

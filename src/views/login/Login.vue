@@ -1,9 +1,9 @@
 <template>
   <div class="title">
-    <h1>星星代付V3.0</h1>
+    <h1>超级代付 1.0</h1>
   </div>
   <div class="login-cont">
-    <h2 class="center">商户后台系统</h2>
+    <h2 class="center">商户后台</h2>
     <p class="center">请登录你的账号</p>
     <el-form label-position="right" ref="refForm" label-width="auto" :model="ruleForm" :rules="{
         username: [

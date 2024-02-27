@@ -143,7 +143,7 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="120">
             <template #default="scope">
-              <a :href="'/merchant/excel/redirect?id=' + scope.row.id + '&t=' + token" class="table-down" target="_blank">下载</a>
+              <a :href="'/proxy/merchant/excel/redirect?id=' + scope.row.id + '&t=' + token" class="table-down" target="_blank">下载</a>
             </template>
           </el-table-column>
         </el-table>
@@ -378,9 +378,9 @@ export default {
 
     const isShowTable = () => {
       getWthdrawalTable({ flag: 2 }).then(res => {
-        if (res.status) {
-          if (Array.isArray(res.data)) {
-            state.wthdrawalList = res.data || [];
+        if (res.status && res.data.d) {
+          if (Array.isArray(res.data.d)) {
+            state.wthdrawalList = res.data.d || [];
           }
         }
       });
@@ -396,7 +396,7 @@ export default {
         }).then(res => {
           if (res.status) {
             ElMessage.success('操作成功');
-            let path = window.location.origin + '/merchant/excel/download?path=' + res.data + '&t=' + token;
+            let path = window.location.origin + '/proxy/merchant/excel/download?path=' + res.data + '&t=' + token;
             window.open(path);
           }
         });

@@ -21,7 +21,7 @@ const request = async (options = defaultOptions) => {
   const option = mergeOptions(options, defaultOptions);
   const { method = 'get', url, data = {}, timeout, headers, loading, toastError, responseType } = option;
   const _method = method.toLocaleLowerCase();
-  console.log('修改前的数据', data);
+  // console.log('修改前的数据', data);
   // 将data里面的时间转换为utc格式
   // dateToUtcString(data);
   // console.info('%c 修改后的数据', 'background-color: #1DAEF8; color: red');
@@ -32,7 +32,7 @@ const request = async (options = defaultOptions) => {
     'X-Ca-Nonce': sign(option, Timestamp)
   };
 
-  console.log(qs.stringify(data));
+  // console.log(qs.stringify(data));
 
   if (loading) startLoading();
   showFullScreenLoading()
@@ -98,7 +98,7 @@ const request = async (options = defaultOptions) => {
             alertError({ data: 502 });
           }
           if (toastError) {
-            console.log('xhr.responseText', xhr.responseText);
+            // console.log('xhr.responseText', xhr.responseText);
             alertError(xhr.responseText);
           }
           reject(xhr.responseText);

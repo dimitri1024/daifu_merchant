@@ -36,7 +36,7 @@
               <span>{{ scope.row.uid }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="商户id" align="center">
+          <!-- <el-table-column label="商户id" align="center">
             <template #default="scope">
               {{ scope.row.merchant_id }}
             </template>
@@ -45,7 +45,7 @@
             <template #default="scope">
               {{ scope.row.created_by_name }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="状态" align="center">
             <template #default="scope">
               <span :style="{ color: scope.row.state == 1 ? 'green' : 'red' }">
@@ -234,6 +234,7 @@ export default {
     const handleEdit = (index, row) => {
       state.isEdit = true;
       Object.assign(state.defaultForm, row);
+      state.defaultForm.password = '';
       state.isShowDialog = true;
     };
 
@@ -277,11 +278,17 @@ export default {
           if (state.isEdit) {
             Object.assign(params, {
               uid: state.defaultForm.uid,
-              password: state.defaultForm.password,
+              // password: state.defaultForm.password,
               state: state.defaultForm.state,
               google: state.defaultForm.google,
               code: state.defaultForm.code
             });
+            // Only assign password if it's not empty
+            if (state.defaultForm.password.trim() !== '') {
+              Object.assign(params, {
+                password: state.defaultForm.password
+              });
+            }
           } else {
             Object.assign(params, {
               ...state.defaultForm
