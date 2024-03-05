@@ -53,7 +53,8 @@
             <tr>
               <td bgcolor="#f3f3f4" class="text-center">接口文档下载</td>
               <td>
-                <a href="../proxy/documents/readme.pdf" style="color: #337ab7">下载</a>
+                <el-button class="copy-btn" size="mini" type="success" plain style="margin-left: 10px" @click="downloadReadmeClick">下载</el-button>
+                <!-- <a href="#" @click="downloadReadme" style="color: #337ab7">下载</a> -->
               </td>
               <td bgcolor="#f3f3f4" class="text-center">商户秘钥</td>
               <td>
@@ -172,6 +173,9 @@ export default {
       showCodeDialog.value = true;
     };
 
+    const downloadReadmeClick = () => {
+      window.open('/merchant/documents/readme.pdf');
+    };
     // 取消修改密码
     const onCancel = () => {
       formInlineRef.value.resetFields();
@@ -251,6 +255,7 @@ export default {
       setNewPwd,
       userKeyCode,
       handleShowCode,
+      downloadReadmeClick,
       format,
       checkForm,
       submitCheck,

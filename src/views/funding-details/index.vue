@@ -9,7 +9,7 @@
               <el-option v-for="(item, index) in channelMenuList" :label="item.name" :value="item.id" :key="index"></el-option>
             </el-select>
           </el-form-item> -->
-          <el-form-item label="三方订单号">
+          <el-form-item label="商户订单号">
             <el-input v-model="formInline.merchant_serial" placeholder="请输入三方订单号"></el-input>
           </el-form-item>
           <el-form-item label="状态">
@@ -35,7 +35,7 @@
       </div>
       <div class="content-list">
         <el-table :data="list" :summary-method="getSummaries" show-summary element-loading-text="Loading" border fit highlight-current-row>
-          <el-table-column label="提现ID" align="center">
+          <el-table-column label="系统订单号" align="center">
             <template #default="scope">
               <span>{{ scope.row.id }}</span>
             </template>
@@ -45,7 +45,7 @@
               <span>{{ scope.row.merchant_id }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="第三方订单号" align="center">
+          <el-table-column label="商户订单号" align="center">
             <template #default="scope">
               <span>{{ scope.row.merchant_serial }}</span>
             </template>
@@ -143,7 +143,7 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="120">
             <template #default="scope">
-              <a :href="'/proxy/merchant/excel/redirect?id=' + scope.row.id + '&t=' + token" class="table-down" target="_blank">下载</a>
+              <a :href="'/merchant/excel/redirect?id=' + scope.row.id + '&t=' + token" class="table-down" target="_blank">下载</a>
             </template>
           </el-table-column>
         </el-table>
@@ -396,7 +396,7 @@ export default {
         }).then(res => {
           if (res.status) {
             ElMessage.success('操作成功');
-            let path = window.location.origin + '/proxy/merchant/excel/download?path=' + res.data + '&t=' + token;
+            let path = window.location.origin + '/merchant/excel/download?path=' + res.data + '&t=' + token;
             window.open(path);
           }
         });
