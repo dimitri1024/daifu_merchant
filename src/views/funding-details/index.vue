@@ -10,7 +10,7 @@
             </el-select>
           </el-form-item> -->
           <el-form-item label="商户订单号">
-            <el-input v-model="formInline.merchant_serial" placeholder="请输入三方订单号"></el-input>
+            <el-input v-model="formInline.merchant_serial" placeholder="请输入商户订单号"></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <el-select v-model="formInline.state">
