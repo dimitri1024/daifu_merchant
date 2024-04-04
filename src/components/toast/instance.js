@@ -4,7 +4,7 @@ export default defineComponent({
   props: {
     message: {
       type: String,
-      default: 'yêu cầu vượt quá thời gian'
+      default: '请求超时'
     },
     onClose: {
       type: Function

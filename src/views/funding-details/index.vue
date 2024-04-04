@@ -338,16 +338,16 @@ export default {
 
     const stateToText = row => {
       if (row.state == 0) {
-        return '自动提现失败';
+        return '失败';
       }
       if (row.state == 1) {
-        return '手动提现失败';
+        return '失败';
       }
       if (row.state == 2) {
         return '成功';
       }
       if (row.state == 3) {
-        return '人工审核中';
+        return '审核中';
       }
       if (row.state == 4) {
         return '出款中';

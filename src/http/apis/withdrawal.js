@@ -14,6 +14,11 @@ export function getBankName(params = {}) {
     return http.get('/merchant/withdraw/bank', params);
   }
 
+// 获取通道编码
+export function getPayTypeList(params = {}) {
+  return http.get('/merchant/withdraw/paytype', params);
+}
+
 // 提交单笔提现
 export function singleWithdrawal(data = {}) {
     return http.post('/merchant/withdraw/insert', data);

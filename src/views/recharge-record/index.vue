@@ -14,7 +14,12 @@
           <el-form-item label="提现金额" prop="amount">
             <el-input size="small" v-model.trim="formInline.amount" type="number" autocomplete="off" placeholder="请输入提现金额"></el-input>
           </el-form-item>
-          <el-form-item label="收款银行" prop="bank_name">
+          <el-form-item label="通道编码" prop="pay_type">
+            <el-select v-model="formInline.pay_type" filterable clearable placeholder="请选择通道编码" @click="getPayTypeHandle">
+              <el-option v-for="(cItem, index) in payTypeList" :key="index" :label="cItem.label" :value="cItem.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="收款银行" prop="bank_name" v-if="(formInline.pay_type == null || formInline.pay_type == 'bank')">
             <el-select v-model="formInline.bank_name" filterable clearable placeholder="请选择收款银行" @click="getBankList">
               <el-option v-for="(cItem, index) in bankList" :key="index" :label="cItem" :value="cItem"></el-option>
             </el-select>
@@ -25,7 +30,7 @@
           <el-form-item label="收款卡号" prop="bank_card">
             <el-input size="small" v-model.trim="formInline.bank_card" autocomplete="off" type="text" placeholder="请输入收款卡号"></el-input>
           </el-form-item>
-          <el-form-item label="开户行">
+          <el-form-item label="开户行" v-if="(formInline.pay_type == null || formInline.pay_type == 'bank')">
             <el-input size="small" v-model.trim="formInline.bank_open" autocomplete="off" placeholder="请输入开户行"></el-input>
           </el-form-item>
           <el-form-item label="动态密码" prop="code">
@@ -42,7 +47,7 @@
 </template>
 <script>
 import { defineComponent, reactive, ref, toRefs } from 'vue';
-import { getBalance, getBankName, singleWithdrawal } from '../../http/apis/withdrawal';
+import { getBalance, getBankName, singleWithdrawal, getPayTypeList } from '../../http/apis/withdrawal';
 import { toFixedNReport } from '../../utils/common';
 import { ElMessage } from 'element-plus';
 
@@ -53,6 +58,7 @@ export default defineComponent({
       formInline: {}
     });
     const bankList = ref([]);
+    const payTypeList = ref([]);
 
     // 获取用户余额信息
     const getBalanceHanlder = () => {
@@ -63,7 +69,7 @@ export default defineComponent({
 
     // 获取银行名称列表
     const getBankList = () => {
-      bankList.value = [];
+      bankList.value = [];      
       getBankName().then(res => {
         if (res.status) {
           Object.keys(res.data).forEach(key => {
@@ -71,6 +77,17 @@ export default defineComponent({
           });
         } else {
           ElMessage.error('获取银行列表信息失败，请刷新页面');
+        }
+      });
+    };
+
+    const getPayTypeHandle = () => {
+      payTypeList.value = [];
+      getPayTypeList().then(res => {
+        if (res.status) {
+          payTypeList.value = res.data;
+        } else { 
+          ElMessage.error('请刷新页面重新获取通道编码');
         }
       });
     };
@@ -132,6 +149,13 @@ export default defineComponent({
           trigger: 'blur'
         }
       ],
+      pay_type: [
+        {
+          required: true,
+          message: '请选择通道编码',
+          trigger: 'blur'
+        }
+      ],
       bank_user: [
         {
           required: true,
@@ -161,6 +185,7 @@ export default defineComponent({
         }
       ]
     };
+
     return {
       ...toRefs(state),
       formInlineRef,
@@ -168,8 +193,10 @@ export default defineComponent({
       rules,
       reset,
       bankList,
+      payTypeList,
       getBankList,
-      toFixedNReport
+      toFixedNReport,
+      getPayTypeHandle
     };
   }
 });
