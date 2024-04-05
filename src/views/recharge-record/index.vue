@@ -16,7 +16,7 @@
           </el-form-item>
           <el-form-item label="通道编码" prop="pay_type">
             <el-select v-model="formInline.pay_type" filterable clearable placeholder="请选择通道编码" @click="getPayTypeHandle">
-              <el-option v-for="(cItem, index) in payTypeList" :key="index" :label="cItem.label" :value="cItem.value"></el-option>
+              <el-option v-for="(cItem, index) in payTypeList" :key="index" :label="cItem.name" :value="cItem.value"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="收款银行" prop="bank_name" v-if="(formInline.pay_type == null || formInline.pay_type == 'bank')">

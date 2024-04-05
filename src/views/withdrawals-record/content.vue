@@ -52,7 +52,7 @@ export default defineComponent({
           pay_type: 'bank'
         },
         {
-          amount: 990,
+          amount: 1010,
           bank_name: '中国工商银行',
           bank_user: '阿狗',
           bank_card: '1231231',
@@ -60,11 +60,11 @@ export default defineComponent({
           pay_type: 'bank'
         },
         {
-          amount: 990,
-          bank_name: '中国工商银行',
+          amount: 1050,
+          bank_name: '',
           bank_user: '阿狗',
           bank_card: '1231231',
-          bank_open: '工行',
+          bank_open: '',
           pay_type: 'alipay'
         }
       ],
