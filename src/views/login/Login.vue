@@ -1,6 +1,6 @@
 <template>
   <div class="title">
-    <h1>超级代付 1.0</h1>
+    <h1>畅付 1.0</h1>
   </div>
   <div class="login-cont">
     <h2 class="center">商户后台</h2>
