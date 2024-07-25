@@ -185,7 +185,6 @@ export default {
     // 获取商户信息
     const getUserData = () => {
       getUserInfo().then(res => {
-        console.log(res);
         if (res.status) {
           userInfo.value = res.data;
         } else {

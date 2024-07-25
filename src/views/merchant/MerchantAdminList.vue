@@ -281,7 +281,6 @@ export default {
     });
     // 搜索
     const searchData = () => {
-      console.log(state.query);
     };
 
     const addMerchant = () => {
@@ -297,7 +296,6 @@ export default {
       state.defaultForm.password = "";
       state.defaultForm.password2 = "";
       Object.assign(state.defaultForm, row);
-      console.log(state.defaultForm)
       state.isShowDialog = true;
     };
 

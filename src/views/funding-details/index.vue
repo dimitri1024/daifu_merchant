@@ -218,7 +218,6 @@ export default {
     // };
 
     const getList = () => {
-      console.log(state.formInline);
       withdrawList(
         empty.preProcessData({
           ...state.formInline,
@@ -280,7 +279,6 @@ export default {
     const handleEdit = (index, row) => {
       state.isEdit = true;
       Object.assign(state.defaultForm, row);
-      console.log(state.defaultForm);
       state.isShowDialog = true;
     };
 

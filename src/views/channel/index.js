@@ -69,7 +69,6 @@ export default defineComponent({
       const getChannel = ()=>{
           isLoading.value = true;
           getChannelList(formInline).then(res =>{
-            console.log(res);
              isLoading.value = false;
              if (res.status) {
                 if (res.data && res.data.d && Array.isArray(res.data.d)) {
@@ -78,7 +77,6 @@ export default defineComponent({
                 }
               }
           }).catch(err =>{
-              console.log(err);
               isLoading.value = false;
           })
       }
@@ -116,7 +114,6 @@ export default defineComponent({
 
      // 开启 关闭
       const handleState = (index,row) =>{
-         console.log(index,row)
       }
      
       // 编辑
@@ -134,7 +131,6 @@ export default defineComponent({
       }
       // 删除
       const showDelDialog = (index,row) =>{
-         console.log(row.id)
          ChannelId.value=row.id
          delDialog.value=true
       }
@@ -164,7 +160,6 @@ export default defineComponent({
        if(dialogType.value==='add'){
         addform.value.validate((valid) => {
           if (valid) {
-            console.log(form);
            addChannel(form).then(res =>{
               if(res.status){
               ElMessage({

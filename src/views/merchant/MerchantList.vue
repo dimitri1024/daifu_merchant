@@ -252,7 +252,6 @@ export default {
     });
     // 搜索
     const searchData = () => {
-      console.log(state.query);
     };
 
     const addMerchant = () => {
@@ -265,7 +264,6 @@ export default {
     const handleEdit = (index, row) => {
       state.isEdit = true;
       Object.assign(state.defaultForm, row);
-      console.log(state.defaultForm)
       state.isShowDialog = true;
     };
 

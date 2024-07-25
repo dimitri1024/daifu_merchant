@@ -10,7 +10,6 @@ const logPlugin = (store) => {
     // called after every mutation.
     // The mutation comes in the format of `{ type, payload }`.
     // console.log('mutation', mutation)
-    console.log('state', state)
   })
 }
 

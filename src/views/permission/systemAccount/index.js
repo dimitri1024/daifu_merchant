@@ -237,8 +237,6 @@ export default defineComponent({
         });
         groupUserList.push(...treeData);
         treeData = listToTree(treeData, 1, 'gid');
-        console.log('---------------------', treeData);
-        console.log(removeTreeNoState(treeData));
         groupUserTree.push(...removeTreeNoState(treeData));
         // console.log('groupUserTree=', groupUserTree);
         // console.log('groupUserList=', groupUserList, groupUserMap);
@@ -247,13 +245,11 @@ export default defineComponent({
 
     const sure = () => {
       if (dialogType.value === 'add') {
-        console.log(elDialogForm.value)
         elDialogForm.value.validate((valid) => {
           if (valid) {
             if (!validateForm(dialogFormInfo)) return;
             add();
           } else {
-            console.log("验证未通过")
           }
         });
       } else {

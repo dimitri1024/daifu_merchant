@@ -203,7 +203,6 @@ export default {
           page_size: state.page_size
         })
       ).then(res => {
-        console.log(res);
         state.list = [];
         if (state.currentPage == 1) {
           state.total = Number(res.data.total) || 0;
@@ -249,7 +248,6 @@ export default {
     });
     // 搜索
     const searchData = () => {
-      console.log(state.query);
     };
 
     // const addMerchant = () => {

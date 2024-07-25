@@ -200,7 +200,6 @@ export default defineComponent({
       formInline.value.title = [''];
     };
     const menuChange = (name: any) => {
-      console.log(name);
       if (name) {
         formInline.value.title_name = name.join('-');
       } else {
@@ -213,7 +212,6 @@ export default defineComponent({
         const start = dayjs(e[0]).format('HH:mm:ss');
         const end = dayjs(e[1]).format('HH:mm:ss');
         // 说明都是为00:00:00
-        console.log(start + '||' + end);
         if (start === end && start === '00:00:00') {
           formInline.value.value1 = [dayjs(e[0]).format('YYYY-MM-DD 00:00:00'), dayjs(e[1]).format('YYYY-MM-DD 23:59:59')];
         }

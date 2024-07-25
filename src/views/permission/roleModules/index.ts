@@ -54,7 +54,6 @@ export default defineComponent({
     const roleAuthFormCanEdit = computed(() => {
       return !isModify.value && !isAdd.value;
     });
-    console.log('roleAuthFormCanEdit=', roleAuthFormCanEdit.value);
 
     const roleAuthClickHandler = (data: typeof ElTree) => {
       const item: ResponsePriveListItem | undefined = getPriveItemByPid(data.pid, storePriveList);

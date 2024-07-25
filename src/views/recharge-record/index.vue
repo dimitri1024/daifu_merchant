@@ -19,7 +19,7 @@
               <el-option v-for="(cItem, index) in payTypeList" :key="index" :label="cItem.name" :value="cItem.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="收款银行" prop="bank_name" v-if="(formInline.pay_type == null || formInline.pay_type == 'bank')">
+          <el-form-item label="收款银行" prop="bank_name" v-if="(formInline.pay_type == null || formInline.pay_type == 'bank' || formInline.pay_type == 'ZTO_PUBLIC')">
             <el-select v-model="formInline.bank_name" filterable clearable placeholder="请选择收款银行" @click="getBankList">
               <el-option v-for="(cItem, index) in bankList" :key="index" :label="cItem" :value="cItem"></el-option>
             </el-select>
@@ -30,7 +30,7 @@
           <el-form-item label="收款卡号" prop="bank_card">
             <el-input size="small" v-model.trim="formInline.bank_card" autocomplete="off" type="text" placeholder="请输入收款卡号"></el-input>
           </el-form-item>
-          <el-form-item label="开户行" v-if="(formInline.pay_type == null || formInline.pay_type == 'bank')">
+          <el-form-item label="开户行" v-if="(formInline.pay_type == null || formInline.pay_type == 'bank' || formInline.pay_type == 'ZTO_PUBLIC')">
             <el-input size="small" v-model.trim="formInline.bank_open" autocomplete="off" placeholder="请输入开户行"></el-input>
           </el-form-item>
           <el-form-item label="动态密码" prop="code">

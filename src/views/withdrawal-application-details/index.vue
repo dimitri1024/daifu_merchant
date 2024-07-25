@@ -161,7 +161,6 @@ export default {
 
     // 搜索
     const search = () => {
-      console.log(state.formInline);
       state.currentPage = 1;
       getList();
     };

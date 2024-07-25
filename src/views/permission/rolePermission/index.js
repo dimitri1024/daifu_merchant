@@ -362,7 +362,6 @@ export default defineComponent({
           }
         }
       }
-      console.log('dialogRoleTreeCheckedKeys=', dialogRoleTreeCheckedKeys);
     };
 
     const initData = () => {
@@ -417,13 +416,10 @@ export default defineComponent({
           //   });
           // }
 
-          console.log('dialogGroupUserTreeData=', dialogGroupUserTreeData);
           dialogGroupUserTreeData = listToTree(dialogGroupUserTreeData, true);
           dialogRoleGroupUserTree.push(...dialogGroupUserTreeData);
-          console.log('dialogGroupUserTreeData=', dialogGroupUserTreeData);
           // console.log('storePriveList=', storePriveList);
           // console.log('storeDialogPriveList=', storeDialogPriveList);
-          console.log('dialogRoleAuthTree=', dialogRoleAuthTree);
         }
       });
 

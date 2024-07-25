@@ -94,7 +94,6 @@ export default defineComponent({
       }
     ]);
     function getList() {
-      console.log(123);
     }
     const onSubmit = (data: any) => {
       pageQuery.value.page = 1;

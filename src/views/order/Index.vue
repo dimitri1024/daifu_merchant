@@ -94,7 +94,6 @@ export default {
     });
     const onSubmit = () => {
       currentPage.value = 1;
-      console.log(formInline.value);
       getList();
     };
     const handleSizeChange = val => {
@@ -114,7 +113,6 @@ export default {
         page_size: page_size.value,
         ...formInline.value
       };
-      console.log(params);
     };
     getList();
     return {
