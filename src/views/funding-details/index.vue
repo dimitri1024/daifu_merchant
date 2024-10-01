@@ -18,8 +18,8 @@
               <el-option label="自动提现失败" value="0">自动提现失败</el-option>
               <el-option label="手动提现失败" value="1">手动提现失败</el-option>
               <el-option label="成功" value="2">成功</el-option>
-              <el-option label="人工审核中" value="3">人工审核中</el-option>
-              <el-option label="自动出款中" value="4">自动出款中</el-option>
+              <el-option label="审核中" value="3">审核中</el-option>
+              <el-option label="出款中" value="4">出款中</el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="">
@@ -341,15 +341,10 @@ export default {
       if (row.state == 1) {
         return '失败';
       }
-      if (row.state == 2) {
+      if ((row.state == 2) || (row.state == 6)) {
         return '成功';
       }
-      if (row.state == 3) {
-        return '审核中';
-      }
-      if (row.state == 4) {
-        return '出款中';
-      }
+      return '出款中';
     };
 
     const txType = row => {
