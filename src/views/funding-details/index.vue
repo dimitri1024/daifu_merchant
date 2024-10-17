@@ -112,7 +112,7 @@
           </el-table-column>
           <el-table-column label="状态" align="center">
             <template #default="scope">
-              <span :style="{ color: scope.row.state == 2 ? 'green' : 'red' }">
+              <span :style="{ color: (scope.row.state == 2 || scope.row.state == 6) ? 'green' : 'red' }">
                 {{ stateToText(scope.row) }}
               </span>
             </template>
