@@ -33,6 +33,15 @@
           <el-form-item label="开户行" v-if="(formInline.pay_type == null || formInline.pay_type == 'bank' || formInline.pay_type == 'ZTO_PUBLIC')">
             <el-input size="small" v-model.trim="formInline.bank_open" autocomplete="off" placeholder="请输入开户行"></el-input>
           </el-form-item>
+          <el-form-item label="省份" prop="prov_id">
+            <el-input size="small" v-model.trim="formInline.prov_id" autocomplete="off" type="text" placeholder="请输入省份"></el-input>
+          </el-form-item>
+          <el-form-item label="地区" prop="area_id">
+            <el-input size="small" v-model.trim="formInline.area_id" autocomplete="off" type="text" placeholder="请输入地区"></el-input>
+          </el-form-item>
+          <el-form-item label="证件号" prop="cert_no">
+            <el-input size="small" v-model.trim="formInline.cert_no" autocomplete="off" type="text" placeholder="请输入证件号"></el-input>
+          </el-form-item>
           <el-form-item label="动态密码" prop="code">
             <el-input size="small" v-model.trim="formInline.code" autocomplete="off" type="number" placeholder="请输入动态密码"></el-input>
           </el-form-item>
@@ -174,6 +183,27 @@ export default defineComponent({
         {
           required: true,
           message: '请输入开户行',
+          trigger: 'blur'
+        }
+      ],
+      area_id: [
+        {
+          required: false,
+          message: '请输入地区',
+          trigger: 'blur'
+        }
+      ],
+      prvo_id: [
+        {
+          required: false,
+          message: '请输入省份',
+          trigger: 'blur'
+        }
+      ],
+      cert_no: [
+        {
+          required: false,
+          message: '请输入证件号',
           trigger: 'blur'
         }
       ],
