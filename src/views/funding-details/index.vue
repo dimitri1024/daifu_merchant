@@ -110,6 +110,11 @@
               {{ scope.row.callback_url }}
             </template>
           </el-table-column>
+          <el-table-column label="备注" align="center">
+            <template #default="scope">
+              {{ scope.row.remark }}
+            </template>
+          </el-table-column>
           <el-table-column label="状态" align="center">
             <template #default="scope">
               <span :style="{ color: (scope.row.state == 2 || scope.row.state == 6) ? 'green' : 'red' }">

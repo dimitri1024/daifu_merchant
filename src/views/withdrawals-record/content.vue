@@ -49,7 +49,8 @@ export default defineComponent({
           bank_user: '阿猫',
           bank_card: '1231231',
           bank_open: '农行',
-          pay_type: 'bank'
+          pay_type: 'bank',
+          remark: ''
         },
         {
           amount: 1010,
@@ -57,7 +58,8 @@ export default defineComponent({
           bank_user: '阿狗',
           bank_card: '1231231',
           bank_open: '工行',
-          pay_type: 'bank'
+          pay_type: 'bank',
+          remark: ''
         },
         {
           amount: 1050,
@@ -65,7 +67,8 @@ export default defineComponent({
           bank_user: '阿狗',
           bank_card: '1231231',
           bank_open: '',
-          pay_type: 'alipay'
+          pay_type: 'alipay',
+          remark: ''
         }
       ],
       isDisabled: false
@@ -75,8 +78,8 @@ export default defineComponent({
     const excelDownload = () => {
       loading.value = true;
       import('@/utils/Export2Excel').then(excel => {
-        const tHeader = ['金额', '收款卡号', '收款姓名', '收款银行', '开户银行', "通道编码"];
-        const filterVal = ['amount', 'bank_card', 'bank_user', 'bank_name', 'bank_open', 'pay_type'];
+        const tHeader = ['金额', '收款卡号', '收款姓名', '收款银行', '开户银行', "通道编码", "备注"];
+        const filterVal = ['amount', 'bank_card', 'bank_user', 'bank_name', 'bank_open', 'pay_type', 'remark'];
         const data = formatJson(filterVal);
         excel.export_json_to_excel({
           header: tHeader,
