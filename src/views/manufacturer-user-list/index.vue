@@ -51,10 +51,10 @@
             </tr>
 
             <tr>
-              <td bgcolor="#f3f3f4" class="text-center">接口文档下载</td>
+              <td bgcolor="#f3f3f4" class="text-center">接口文档</td>
               <td>
-                <el-button class="copy-btn" size="mini" type="success" plain style="margin-left: 10px" @click="downloadReadmeClick">下载</el-button>
-                <!-- <a href="#" @click="downloadReadme" style="color: #337ab7">下载</a> -->
+                <!-- <el-button class="copy-btn" size="mini" type="success" plain style="margin-left: 10px" @click="downloadReadmeClick">下载</el-button> -->
+                <a href="http://54.46.30.160:4999/web/#/638802340/229700773" target="_blank" rel="noopener noreferrer" style="color: #337ab7">查看文档</a>
               </td>
               <td bgcolor="#f3f3f4" class="text-center">商户秘钥</td>
               <td>
