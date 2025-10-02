@@ -4,13 +4,11 @@
     <el-card class="box-card">
       <div class="filter-container">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <!-- <el-form-item label="代付渠道">
-            <el-select v-model="formInline.channel_id" placeholder="请选择代付渠道" clearable >
-              <el-option v-for="(item, index) in channelMenuList" :label="item.name" :value="item.id" :key="index"></el-option>
-            </el-select>
-          </el-form-item> -->
           <el-form-item label="商户订单号">
             <el-input v-model="formInline.merchant_serial" placeholder="请输入商户订单号"></el-input>
+          </el-form-item>
+          <el-form-item label="系统订单号">
+            <el-input v-model="formInline.system_serial" placeholder="请输入系统订单号"></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <el-select v-model="formInline.state">
