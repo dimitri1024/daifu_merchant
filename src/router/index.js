@@ -131,7 +131,6 @@ router.beforeEach((to, from, next) => {
   } else if (to.path !== '/login' && store.state.userInfo.login) {
     next()
   } else {
-    console.error(123)
     next()
   }
 });

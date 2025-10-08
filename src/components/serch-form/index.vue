@@ -312,12 +312,10 @@ export default defineComponent({
           // 删除空的obj
           if (!props.isFor) {
             ctx.emit('onSubmit', empty.preProcessData(obj.value));
-            console.log('onSubmit');
           } else {
             ctx.emit('update:jvbObject', empty.preProcessData(obj.value));
           }
         } else {
-          console.log('error submit!!');
           return false;
         }
       });

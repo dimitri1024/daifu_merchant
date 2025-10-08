@@ -181,9 +181,7 @@ export default defineComponent({
           });
           // 删除空的obj
           ctx.emit('onSubmit', empty.preProcessData(obj.value));
-          console.log('onSubmit');
         } else {
-          console.log('error submit!!');
           return false;
         }
       });

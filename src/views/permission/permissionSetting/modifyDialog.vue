@@ -181,13 +181,11 @@ export default {
                   this.btnLoading = false;
                 });
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
           }
         } else {
-          console.warn('error submit!!');
           return false;
         }
       });

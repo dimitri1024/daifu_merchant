@@ -60,7 +60,6 @@ export default defineComponent({
             if (valid) {
               resolve(form.value.code);
             } else {
-              console.log('error submit!!');
               return false;
             }
           });

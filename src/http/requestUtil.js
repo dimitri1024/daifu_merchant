@@ -13,7 +13,7 @@ export const defaultOptions = {
   timeout: 12000,
   headers: {},
   responseType: 'text',
-  sign: true, // 默认不加签
+  sign: true,
 };
 
 let timer = null;
@@ -40,7 +40,6 @@ export function mergeOptions(options = {}, default_options = {}) {
   for (const key in options) {
     const o_value = options[key];
     const d_value = default_options[key] || {};
-    // 如果options中的参数 在默认中有并且是对象则合并
     if (o_value && typeof o_value === 'object') {
       option[key] = { ...d_value, ...o_value };
     }
@@ -63,7 +62,6 @@ export function closeLoading() {
 
 
 export function alertError(responese = {}) {
-  console.log('responese', responese);
   Event.emit('toast', responese);
 }
 
@@ -89,7 +87,6 @@ export function sign(option, Timestamp = 0) {
   let signStr = '';
   const key = KEYS[D];
   if (_method === 'GET') {
-    // get请求 如果是 json
     _path = url + pare(data);
     signStr = key + l_t + _path;
   } else if (_method === 'POST') {
@@ -97,12 +94,6 @@ export function sign(option, Timestamp = 0) {
     let s = encryptQuery(data, D);
     signStr = s + key + l_t + _path;
   }
-  // console.log('===================');
-  // console.log(method, url);
-  // console.log('参数', data);
-  // console.log('_path', _path);
-  // console.log('l_t', l_t);
-  // console.log('-----', signStr);
   return murmurhash3_32_gc(signStr, 31);
 }
 

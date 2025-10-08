@@ -198,8 +198,6 @@ export function listToTree(
     }
   });
 
-  console.error(list)
-
   return list.filter(item => {
     if (item[pidProp] == 0) {
       return item;

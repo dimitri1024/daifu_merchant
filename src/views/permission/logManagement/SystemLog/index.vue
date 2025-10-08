@@ -185,7 +185,6 @@ export default defineComponent({
           if (valid) {
             getList();
           } else {
-            console.log('error submit!!');
             return false;
           }
         });

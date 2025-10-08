@@ -71,7 +71,6 @@ export default defineComponent({
       if (elForm.value) {
         elForm.value.validate(valid => {
           if (valid) {
-            console.log('submit!!');
             ElMessageBox.confirm('proxy will permanently delete the file. Continue?', 'Warning', {
               confirmButtonText: 'OK',
               cancelButtonText: 'Cancel',
@@ -90,7 +89,6 @@ export default defineComponent({
                 });
               });
           } else {
-            console.log('error submit!!');
             return false;
           }
         });

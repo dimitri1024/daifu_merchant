@@ -108,14 +108,12 @@ export default {
                 if (valid) {
                   me.$emit('create-action');
                 } else {
-                  console.log('error submit!!');
                   return false;
                 }
               });
             }
           }
         } else {
-          console.warn('error submit!!');
           return false;
         }
       });

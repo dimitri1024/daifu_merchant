@@ -3,9 +3,9 @@
     <el-card class="box-card">
       <div class="filter-container">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="商户订单号">
+          <!-- <el-form-item label="商户订单号">
             <el-input v-model="formInline.merchant_serial" placeholder="请输入商户订单号" clearable></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="系统订单号">
             <el-input v-model="formInline.order_id" placeholder="请输入系统订单号" clearable></el-input>
           </el-form-item>
@@ -26,7 +26,7 @@
               <span>{{ scope.row.id }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="订单ID" align="center">
+          <el-table-column label="系统订单号" align="center">
             <template #default="scope">
               <span>{{ scope.row.order_id }}</span>
             </template>

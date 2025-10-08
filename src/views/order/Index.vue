@@ -100,12 +100,10 @@ export default {
       page_size.value = val;
       state.currentPage = 1;
       getList();
-      console.log(`${val} items per page`);
     };
     const handleCurrentChange = val => {
       currentPage.value = val;
       getList();
-      console.log(`current page: ${val}`);
     };
     const getList = () => {
       var params = {
