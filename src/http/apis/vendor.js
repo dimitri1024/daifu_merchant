@@ -25,6 +25,16 @@ export function getBalance(params = {}) {
   return http.get('/merchant/transaction/list', params);
 }
 
+
+/**
+ * @账变记录导出
+ * @param {*}
+ */
+export function exportTransactionTable(params = {}) {
+  return http.post('/merchant/excel/export_transaction', params);
+}
+
+
 /**
  * @查询是否自带充值功能
  * @param {*}

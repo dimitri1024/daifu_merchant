@@ -3,31 +3,18 @@
     <el-card class="box-card">
       <div class="filter-container">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <!-- <el-form-item label="订单ID">
-            <el-input v-model="formInline.order_id" placeholder="请输入订单ID" clearable></el-input>
+          <el-form-item label="商户订单号">
+            <el-input v-model="formInline.merchant_serial" placeholder="请输入商户订单号" clearable></el-input>
           </el-form-item>
-          <el-form-item label="类型">
-            <el-select v-model="formInline.cash_type">
-              <el-option label="全部" value="">全部</el-option>
-              <el-option label="API提现" value="1">API提现</el-option>
-              <el-option label="手动提现" value="2">手动提现</el-option>
-              <el-option label="代充手续费" value="3">代充手续费</el-option>
-              <el-option label="代付手续费" value="4">代付手续费</el-option>
-              <el-option label="usdt充值" value="5">usdt充值</el-option>
-              <el-option label="银行卡充值" value="6">银行卡充值</el-option>
-              <el-option label="余额划转" value="7">余额划转</el-option>
-              <el-option label="手动代付失败返款" value="8">手动代付失败返款</el-option>
-              <el-option label="增加余额" value="9">增加余额</el-option>
-              <el-option label="商户冲正" value="10">商户冲正</el-option>
-              <el-option label="代付手续费返款" value="11">代付手续费返款</el-option>
-              <el-option label="扣减余额" value="12">扣减余额</el-option>
-            </el-select>
-          </el-form-item> -->
+          <el-form-item label="系统订单号">
+            <el-input v-model="formInline.order_id" placeholder="请输入系统订单号" clearable></el-input>
+          </el-form-item>
           <el-form-item label="">
             <el-date-picker v-model="times" type="datetimerange" start-placeholder="开始时间" end-placeholder="结束时间" :default-time="defaultTime" @change="setSearchTime"> </el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="search">查询</el-button>
+            <el-button class="filter-item" style="margin-left: 10px" type="primary" @click="exportTable"> 导出 </el-button>
             <el-button class="filter-item" style="margin-left: 10px" type="primary" @click="isShowTable"> 下载表格 </el-button>
           </el-form-item>
         </el-form>
@@ -109,7 +96,7 @@
 
 <script>
 import { reactive, toRefs, ref } from 'vue';
-import { transactionList } from '../../http/apis/vendor';
+import { transactionList, exportTransactionTable } from '../../http/apis/vendor';
 import { getRechargeTable } from '../../http/apis/merchant';
 import { ElCard, ElInput, ElButton, ElTable, ElTableColumn, ElSelect, ElOption, ElPagination, ElDialog, ElForm, ElFormItem, ElRadioGroup, ElRadio, ElMessage, ElMessageBox } from 'element-plus';
 import { generateCode } from '../../utils/generateCode';
@@ -245,6 +232,22 @@ export default {
 
     const token = store.getters.userInfo.token;
 
+    const exportTable = () => {
+      if (state.formInline.st && state.formInline.et) {
+        exportTransactionTable({
+          ...state.formInline
+        }).then(res => {
+          if (res.status) {
+            ElMessage.success('操作成功');
+            let path = window.location.origin + '/merchant/excel/download_transaction?path=' + res.data + '&t=' + token;
+            window.open(path);
+          }
+        });
+      } else {
+        ElMessage.warning('请选择开始时间和结束时间！！');
+      }
+    };
+
     return {
       ...toRefs(state),
       isShowTable,
@@ -258,7 +261,8 @@ export default {
       search,
       dateFormat,
       setSearchTime,
-      token
+      token,
+      exportTable
     };
   }
 };
