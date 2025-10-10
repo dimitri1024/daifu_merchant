@@ -29,6 +29,24 @@
             <el-button class="filter-item" style="margin-left: 10px" type="primary" @click="isShowTable"> 下载表格 </el-button>
             
           </el-form-item>
+          <el-form-item>
+            <div style="display: flex">
+              <div style="font-size: small;margin-right: 10px;">订单总数</div>
+              <div style="color: blue; margin-right: 10px; ">{{ total }}</div>
+              <div style="font-size: small;margin-right: 10px;">总金额</div>
+              <div v-if="total>0" style="margin-right: 10px;color: red;">  {{ toFixedNReport(all_money) }}</div>
+              <div v-else style="margin-right: 10px;color: red;">  0</div>
+              <div style="font-size: small;margin-right: 10px;">成功总金额</div>
+              <div v-if="total>0" style="margin-right: 10px;color: blue;">{{ toFixedNReport(success_money) }}</div>
+              <div v-else style="margin-right: 10px;color: blue;">0</div>
+              <div style="font-size: small;margin-right: 10px;">失败总金额</div>
+              <div v-if="total>0" style="margin-right: 10px;color: blue;">{{ toFixedNReport(failed_money) }}</div>
+              <div v-else style="margin-right: 10px;color: blue;">0</div>
+              <div style="font-size: small;margin-right: 10px;">成功率</div>
+              <div v-if="total>0" style="margin-right: 10px;color: green;">{{ toFixedNReport(success_rate) }}%</div>
+              <div v-else style="margin-right: 10px;color: green;">0%</div>
+            </div>
+          </el-form-item>
         </el-form>
       </div>
       <div class="content-list">
@@ -176,6 +194,10 @@ export default {
       query: '',
       formInline: {
         state: '',
+        all_money: 0,
+        failed_money: 0,
+        success_money: 0,
+        success_rate: 0,
         name: ''
       },
       isEdit: true,
@@ -236,6 +258,10 @@ export default {
           if (Array.isArray(res.data.d)) {
             state.list = res.data.d || [];
           }
+          state.all_money = res.data.summary.all_money;
+          state.failed_money = res.data.summary.failed_money;
+          state.success_money = res.data.summary.success_money;
+          state.success_rate = res.data.summary.success_rate;
         }
       });
     };
