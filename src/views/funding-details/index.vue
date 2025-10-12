@@ -194,12 +194,12 @@ export default {
       query: '',
       formInline: {
         state: '',
-        all_money: 0,
-        failed_money: 0,
-        success_money: 0,
-        success_rate: 0,
         name: ''
       },
+      all_money: 0,
+      failed_money: 0,
+      success_money: 0,
+      success_rate: 0,
       isEdit: true,
       defaultForm: {
         channel_id: '', // 代付渠道ID
@@ -251,9 +251,6 @@ export default {
         })
       ).then(res => {
         state.list = [];
-        if (state.currentPage == 1) {
-          state.total = Number(res.data.total) || 0;
-        }
         if (res.status) {
           if (Array.isArray(res.data.d)) {
             state.list = res.data.d || [];
@@ -262,6 +259,7 @@ export default {
           state.failed_money = res.data.summary.failed_money;
           state.success_money = res.data.summary.success_money;
           state.success_rate = res.data.summary.success_rate;
+          state.total = Number(res.data.total) || 0;
         }
       });
     };
