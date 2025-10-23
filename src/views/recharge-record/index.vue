@@ -33,11 +33,33 @@
           <el-form-item label="开户行" v-if="(formInline.pay_type == null || formInline.pay_type == 'bank' || formInline.pay_type == 'ZTO_PUBLIC')">
             <el-input size="small" v-model.trim="formInline.bank_open" autocomplete="off" placeholder="请输入开户行"></el-input>
           </el-form-item>
-          <el-form-item label="省份" prop="prov_id">
+          <el-form-item label="省份" prop="prov_id" v-if="!(formInline.pay_type === 'alipay' || formInline.pay_type === 'wechat')">
             <el-input size="small" v-model.trim="formInline.prov_id" autocomplete="off" type="text" placeholder="请输入省份"></el-input>
           </el-form-item>
-          <el-form-item label="地区" prop="area_id">
+          <el-form-item label="地区" prop="area_id" v-if="!(formInline.pay_type === 'alipay' || formInline.pay_type === 'wechat')">
             <el-input size="small" v-model.trim="formInline.area_id" autocomplete="off" type="text" placeholder="请输入地区"></el-input>
+          </el-form-item>
+          <el-form-item label="上传图片" v-if="formInline.pay_type === 'alipay' || formInline.pay_type === 'wechat'">
+            <el-upload
+              ref="uploadRef"
+              :auto-upload="false"
+              :on-change="handleImageChange"
+              :show-file-list="false"
+              accept="image/*"
+              :limit="1"
+            >
+              <el-button size="small" type="primary">选择文件</el-button>
+              <template #tip>
+                <div class="el-upload__tip">
+                  只能上传图片文件
+                </div>
+              </template>
+            </el-upload>
+            <div v-if="selectedImage && selectedImage.name" class="selected-file-info">
+              <span class="check-icon">✓</span>
+              <span>已选择: {{ selectedImage.name }}</span>
+              <el-button size="small" type="danger" text @click="removeSelectedFile">删除</el-button>
+            </div>
           </el-form-item>
           <el-form-item label="证件号" prop="cert_no">
             <el-input size="small" v-model.trim="formInline.cert_no" autocomplete="off" type="text" placeholder="请输入证件号"></el-input>
@@ -63,9 +85,12 @@ import { ElMessage } from 'element-plus';
 export default defineComponent({
   setup() {
     const formInlineRef = ref();
+    const uploadRef = ref();
     const state = reactive({
       formInline: {}
     });
+    const selectedImage = ref(null);
+    const imageBase64 = ref(null);
     const bankList = ref([]);
     const payTypeList = ref([]);
 
@@ -101,6 +126,41 @@ export default defineComponent({
       });
     };
 
+    // 处理图片选择
+    const handleImageChange = (file) => {
+      const isImage = file.raw.type.startsWith('image/');
+      if (!isImage) {
+        ElMessage.error('只能上传图片文件!');
+        return false;
+      }
+      
+      const isLt2M = file.raw.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        ElMessage.error('图片大小不能超过 2MB!');
+        return false;
+      }
+
+      selectedImage.value = file.raw;
+      
+      // 将图片转换为base64
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imageBase64.value = e.target.result;
+      };
+      reader.readAsDataURL(file.raw);
+      
+      return false; // 阻止自动上传
+    };
+
+    // 删除已选择的文件
+    const removeSelectedFile = () => {
+      selectedImage.value = null;
+      imageBase64.value = null;
+      if (uploadRef.value) {
+        uploadRef.value.clearFiles();
+      }
+    };
+
     getBalanceHanlder();
 
     // 提交提现申请
@@ -119,10 +179,23 @@ export default defineComponent({
             ElMessage.error('提现金额不能大于50000');
             return;
           }
+          
+          // 检查支付宝或微信是否需要上传图片
+          if ((state.formInline.pay_type === 'alipay' || state.formInline.pay_type === 'wechat') && !imageBase64.value) {
+            ElMessage.error('请上传图片');
+            return;
+          }
+          
           const params = {
             ...state.formInline
           };
           delete params.balance;
+          
+          // 如果是支付宝或微信，添加recUrl参数
+          if (state.formInline.pay_type === 'alipay' || state.formInline.pay_type === 'wechat') {
+            params.recUrl = imageBase64.value;
+          }
+          
           singleWithdrawal(params).then(res => {
             if (res.status) {
               ElMessage.success('操作成功');
@@ -141,6 +214,11 @@ export default defineComponent({
     const reset = () => {
       formInlineRef.value.resetFields();
       state.formInline.bank_open = '';
+      selectedImage.value = null;
+      imageBase64.value = null;
+      if (uploadRef.value) {
+        uploadRef.value.clearFiles();
+      }
     };
 
     const rules = {
@@ -219,6 +297,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       formInlineRef,
+      uploadRef,
       insert,
       rules,
       reset,
@@ -226,11 +305,41 @@ export default defineComponent({
       payTypeList,
       getBankList,
       toFixedNReport,
-      getPayTypeHandle
+      getPayTypeHandle,
+      handleImageChange,
+      removeSelectedFile,
+      selectedImage,
+      imageBase64
     };
   }
 });
 </script>
 
 <style scoped lang="less">
+.selected-file-info {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #f0f9ff;
+  border: 1px solid #b3d8ff;
+  border-radius: 4px;
+  color: #1890ff;
+  
+  .check-icon {
+    margin-right: 8px;
+    color: #52c41a;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  span:not(.check-icon) {
+    flex: 1;
+    font-size: 14px;
+  }
+  
+  .el-button {
+    margin-left: 8px;
+  }
+}
 </style>
