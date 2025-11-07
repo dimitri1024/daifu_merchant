@@ -91,3 +91,11 @@ export function merchantDepositList( params = {}) {
  export function exportOrderTable(params = {}) {
   return http.post('/merchant/excel/export', params);
 }
+
+/**
+ * @根据订单号获取订单信息（用于二维码页面）
+ * @param {*} orderId 系统订单号
+ */
+export function getOrderInfoForQR(orderId) {
+  return http.get(`/merchant/api/qr/${orderId}`, {}, { loading: false, toastError: false });
+}

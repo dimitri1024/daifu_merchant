@@ -10,6 +10,14 @@ export const routes = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/login/Login.vue')
+  },
+  {
+    path: '/qr/:orderId',
+    name: 'QRCode',
+    component: () => import('@/views/qr/index.vue'),
+    meta: {
+      requiresAuth: false // 不需要登录验证
+    }
   }
 ]
 
@@ -116,6 +124,12 @@ router.beforeEach((to, from, next) => {
         url: to.href
       })
     }
+  }
+
+  // QR页面不需要登录验证
+  if (to.path.startsWith('/qr/')) {
+    next()
+    return
   }
 
   // 如果去login，如果登录了，去home
