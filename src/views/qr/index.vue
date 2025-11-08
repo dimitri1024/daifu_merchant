@@ -2,12 +2,12 @@
   <div class="qr-container">
     <div class="qr-content">
       <!-- 标题 -->
-      <h1 class="qr-title">支付宝收款码</h1>
+      <h1 class="qr-title">支付宝转账</h1>
       
       <!-- 二维码区域 -->
-      <div class="qr-code-wrapper">
+      <!-- <div class="qr-code-wrapper">
         <canvas ref="qrCanvas" class="qr-canvas"></canvas>
-      </div>
+      </div> -->
       
       <!-- 信息区域 -->
       <div class="info-section">
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { getOrderInfoForQR } from '@/http/apis/merchant';
 import { copy } from '@/utils/common';
@@ -125,7 +125,14 @@ export default {
     };
 
     onMounted(() => {
+      // 修改页面标题
+      document.title = '支付页面';
       loadOrderData();
+    });
+
+    onUnmounted(() => {
+      // 页面卸载时恢复默认标题（可选，根据需求决定是否保留）
+      // document.title = '商户后台';
     });
 
     return {

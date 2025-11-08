@@ -1,8 +1,12 @@
 <template>
-  <div class="title">
-    <h1>超级付 1.0</h1>
-  </div>
+  <!-- <div class="title">
+    <h1>DB快付通</h1>
+  </div> -->
   <div class="login-cont">
+    <div class="logo-container">
+      <img src="@/assets/kuaifutong_logo.jpg" alt="快付通" class="logo" />
+    </div>
+    <h1 class="center">DB快付通</h1>
     <h2 class="center">商户后台</h2>
     <p class="center">请登录你的账号</p>
     <el-form label-position="right" ref="refForm" label-width="auto" :model="ruleForm" :rules="{
@@ -128,6 +132,27 @@
   transform: translate(-50%, -50%);
   > p {
     padding: 10px 20px;
+  }
+  h1.center {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  h2.center {
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+  p.center {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+}
+.logo-container {
+  text-align: center;
+  margin-bottom: 30px;
+  .logo {
+    max-width: 300px;
+    max-height: 120px;
+    object-fit: contain;
   }
 }
 </style>
