@@ -181,10 +181,10 @@ export default defineComponent({
           }
           
           // 检查支付宝或微信是否需要上传图片
-          if ((state.formInline.pay_type === 'alipay' || state.formInline.pay_type === 'wechat') && !imageBase64.value) {
-            ElMessage.error('请上传图片');
-            return;
-          }
+          // if ((state.formInline.pay_type === 'alipay' || state.formInline.pay_type === 'wechat') && !imageBase64.value) {
+          //   ElMessage.error('请上传图片');
+          //   return;
+          // }
           
           const params = {
             ...state.formInline
