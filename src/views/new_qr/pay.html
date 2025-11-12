@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
   <title>支付宝转账</title>
   <style>
     body {
@@ -32,368 +32,167 @@
       justify-content: center;
       gap: 8px;
     }
-    .header img {
-      width: 44px;
-      height: 44px;
-      vertical-align: middle;
-    }
-    .header span {
-      font-size: 21px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    .step {
-      border-bottom: 1px solid #eee;
-      padding: 22px 20px;
-    }
-    .step:last-child {
-      border-bottom: none;
-    }
-    .step-title {
-      font-weight: 600;
-      color: #108ee9;
-      margin-bottom: 10px;
-      font-size: 17px;
-    }
+    .header img { width: 44px; height: 44px; vertical-align: middle; }
+    .header span { font-size: 21px; font-weight: 600; letter-spacing: .5px; }
+
+    .step { border-bottom: 1px solid #eee; padding: 22px 20px; }
+    .step:last-child { border-bottom: none; }
+    .step-title { font-weight: 600; color: #108ee9; margin-bottom: 10px; font-size: 17px; }
     .info-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px dashed #eee;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 0; border-bottom:1px dashed #eee; gap:10px;
     }
-    .info-item:last-child {
-      border-bottom: none;
-    }
-    .label {
-      color: #666;
-      font-size: 15px;
-    }
-    .value {
-      font-weight: 600;
-      font-size: 16px;
-      word-break: break-all;
-    }
+    .info-item:last-child { border-bottom:none; }
+    .label { color:#666; font-size:15px; white-space:nowrap; }
+    .value { font-weight:600; font-size:16px; word-break:break-all; flex:1; text-align:right; }
     .copy-btn {
-      background: #108ee9;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 4px 12px;
-      font-size: 14px;
-      cursor: pointer;
+      background:#108ee9; color:#fff; border:none; border-radius:6px;
+      padding:6px 12px; font-size:14px; cursor:pointer; white-space:nowrap;
     }
-    .tip {
-      font-size: 14px;
-      line-height: 1.7;
-      color: #555;
-      margin-top: 10px;
-    }
+    .copy-btn:hover { background:#0c7cd5; }
+    .tip { font-size:14px; line-height:1.7; color:#555; margin-top:10px; }
     .alipay-btn {
-      display: block;
-      width: 100%;
-      background: #108ee9;
-      color: #fff;
-      text-align: center;
-      padding: 14px 0;
-      font-size: 17px;
-      font-weight: 600;
-      border-radius: 10px;
-      margin-top: 18px;
-      text-decoration: none;
-      transition: background 0.2s;
+      display:block; width:100%; background:#108ee9; color:#fff; text-align:center;
+      padding:14px 0; font-size:17px; font-weight:600; border-radius:10px; margin-top:18px;
+      text-decoration:none; transition:background .2s;
     }
-    .alipay-btn:hover {
-      background: #0c7cd5;
-    }
+    .alipay-btn:hover { background:#0c7cd5; }
+
+    /* 覆盖层（仅在支付宝内显示） */
     .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      z-index: 9999;
-      flex-direction: column;
-      text-align: center;
-      padding: 20px;
+      position: fixed; inset: 0; background: rgba(0,0,0,.65);
+      display: none; align-items: center; justify-content: center;
+      z-index: 9999; padding: 20px;
     }
     .overlay-box {
-      background: #fff;
-      color: #333;
-      padding: 25px 22px;
-      border-radius: 10px;
-      max-width: 85%;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      background: #fff; color: #333; padding: 24px 20px; border-radius: 12px;
+      width: min(92%, 460px); box-shadow: 0 4px 12px rgba(0,0,0,.2); text-align: center;
     }
-    .overlay-box h3 {
-      color: #108ee9;
-      margin-bottom: 10px;
-    }
-    .open-btn {
-      background: #108ee9;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 16px;
-      margin-top: 12px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-    .loading {
-      text-align: center;
-      padding: 40px 20px;
-      color: #666;
-    }
-    .error {
-      text-align: center;
-      padding: 40px 20px;
-      color: #ff4d4f;
-    }
+    .overlay-box h3 { color:#108ee9; margin:0 0 8px; }
+    .overlay-box p { margin:6px 0; color:#444; font-size:14px; line-height:1.6; }
+    .hint { display:inline-block; background:#f2f8ff; color:#0b72c7; padding:2px 6px; border-radius:6px; font-weight:600; }
+
+    .guide-svg { width:100%; height:auto; margin-top:12px; border-radius:10px; display:block; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <div class="logo-wrap">
-        <img src="img/logo2.png" alt="支付宝Logo">
+        <img src="img/logo2.png" alt="支付宝Logo" onerror="this.style.display='none'">
         <span>支付宝转账</span>
       </div>
     </div>
 
-    <div class="step" id="orderInfoStep">
+    <div class="step">
       <div class="step-title">第一步：确认付款信息</div>
-      <div id="loadingInfo" class="loading" style="display:none;">加载中...</div>
-      <div id="errorInfo" class="error" style="display:none;"></div>
-      <div id="orderInfo" style="display:none;">
-        <div class="info-item">
-          <span class="label">支付宝账号</span>
-          <span class="value" id="bankCard">--</span>
-          <button class="copy-btn" onclick="copyBankCard()">复制</button>
-        </div>
-        <div class="info-item">
-          <span class="label">金额</span>
-          <span class="value" id="amount">--</span>
-          <button class="copy-btn" onclick="copyAmount()">复制</button>
-        </div>
-        <div class="info-item">
-          <span class="label">姓名</span>
-          <span class="value" id="maskedName" data-name=""></span>
-          <button class="copy-btn" onclick="copyNameFirstChar()">复制</button>
-        </div>
+      <div class="info-item">
+        <span class="label">支付宝账号</span>
+        <span class="value" id="alipayAccount">13590953088</span>
+        <button class="copy-btn" type="button" data-copy="#alipayAccount">复制</button>
+      </div>
+      <div class="info-item">
+        <span class="label">金额</span>
+        <span class="value" id="payAmount">846.00</span>
+        <button class="copy-btn" type="button" data-copy="#payAmount">复制</button>
+      </div>
+      <div class="info-item">
+        <span class="label">姓名</span>
+        <span class="value" id="maskedName" data-name="施才勇"></span>
+        <button class="copy-btn" type="button" id="copyNameFirstChar">复制</button>
       </div>
     </div>
 
     <div class="step">
       <div class="step-title">第二步：复制并前往支付宝</div>
       <div class="tip">
-        1. 请依次复制上方的支付宝账号和金额<br>
+        1. 复制上方的支付宝账号和金额<br>
         2. 打开支付宝 → 点击“转账” → “转到支付宝账户”<br>
         3. 粘贴刚才复制的信息，核对收款人姓名后进行转账
       </div>
     </div>
 
-    <div class="step">
+    <!--<div class="step">
       <a class="alipay-btn" href="alipays://platformapi/startapp?appId=20000056">打开支付宝转账</a>
-    </div>
+    </div>-->
   </div>
 
-  <div id="alipayOverlay" class="overlay" style="display:none;">
+  <!-- 仅调整后的弹窗提醒（引导右上角 ⋯ → 在默认浏览器中打开） -->
+  <div id="alipayOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="打开方式引导">
     <div class="overlay-box">
-      <h3>请使用外部浏览器打开</h3>
-      <p>当前页面在支付宝内无法直接跳转，请点击下方按钮复制链接，在手机浏览器中打开。</p>
-      <button class="open-btn" onclick="openInBrowser()">复制并在浏览器中打开</button>
+      <h3>请在外部默认浏览器打开</h3>
+      <p>当前页面在支付宝内无法直接跳转。</p>
+      <p>请点击右上角 <span class="hint">⋯</span> → 选择 <span class="hint">在默认浏览器中打开</span></p>
+
+      <!-- 内置SVG引导图，无需外部图片 -->
+      <svg class="guide-svg" viewBox="0 0 820 460" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#eaf4ff"/>
+            <stop offset="1" stop-color="#ffffff"/>
+          </linearGradient>
+        </defs>
+        <rect x="20" y="60" rx="16" ry="16" width="780" height="360" fill="url(#g1)" stroke="#dbe7f5"/>
+        <rect x="20" y="60" rx="16" ry="16" width="780" height="68" fill="#108ee9"/>
+        <circle cx="760" cy="94" r="6" fill="#fff"/>
+        <circle cx="740" cy="94" r="6" fill="#fff"/>
+        <circle cx="720" cy="94" r="6" fill="#fff"/>
+        <rect x="540" y="110" width="240" height="150" rx="10" ry="10" fill="#fff" stroke="#dfe8f3"/>
+        <rect x="550" y="130" width="220" height="40" rx="8" ry="8" fill="#e8f3ff" stroke="#bcdcff"/>
+        <text x="560" y="156" font-size="18" font-weight="600" fill="#0b72c7">在默认浏览器中打开</text>
+        <path d="M690,110 C690,110 640,130 610,190" fill="none" stroke="#2b8df5" stroke-width="10"/>
+        <polygon points="610,190 640,186 628,210" fill="#2b8df5"/>
+      </svg>
     </div>
   </div>
 
   <script>
-    let orderData = {
-      bank_user: '',
-      bank_card: '',
-      apply_amount: 0
-    };
-
-    // 获取URL参数
-    function getUrlParam(name) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(name);
-    }
-
-    // 从路径中获取订单ID（例如：/pay.html?orderId=xxx 或 /pay/xxx）
-    function getOrderId() {
-      // 优先从查询参数获取
-      let orderId = getUrlParam('orderId');
-      if (orderId) return orderId;
-      
-      // 从路径中获取（例如：/pay/xxx）
-      const path = window.location.pathname;
-      const pathParts = path.split('/');
-      const lastPart = pathParts[pathParts.length - 1];
-      if (lastPart && lastPart !== 'pay.html' && lastPart !== 'pay') {
-        return lastPart;
-      }
-      
-      return null;
-    }
-
-    // 获取API基础URL
-    function getBaseUrl() {
-      // 开发环境使用 /proxy，生产环境使用当前域名
-      const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      return isDev ? '/proxy' : window.location.origin;
-    }
-
-    // 加载订单数据
-    async function loadOrderData() {
-      const orderId = getOrderId();
-      if (!orderId) {
-        showError('订单号不能为空');
-        return;
-      }
-
-      const loadingEl = document.getElementById('loadingInfo');
-      const errorEl = document.getElementById('errorInfo');
-      const orderInfoEl = document.getElementById('orderInfo');
-
-      loadingEl.style.display = 'block';
-      errorEl.style.display = 'none';
-      orderInfoEl.style.display = 'none';
-
-      try {
-        const baseUrl = getBaseUrl();
-        const apiUrl = `${baseUrl}/merchant/api/qr/${orderId}?r=${Date.now()}`;
-        
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-
-        const result = await response.json();
-        
-        if (result.status && result.data) {
-          orderData = result.data;
-          updateOrderInfo();
-          loadingEl.style.display = 'none';
-          orderInfoEl.style.display = 'block';
-        } else {
-          showError(result.data || '获取订单信息失败');
-        }
-      } catch (error) {
-        console.error('加载订单数据失败:', error);
-        showError('加载订单数据失败，请稍后重试');
-      }
-    }
-
-    // 更新订单信息显示
-    function updateOrderInfo() {
-      // 更新支付宝账号
-      const bankCardEl = document.getElementById('bankCard');
-      bankCardEl.textContent = orderData.bank_card || '--';
-
-      // 更新金额
-      const amountEl = document.getElementById('amount');
-      const amount = orderData.apply_amount || 0;
-      amountEl.textContent = '￥' + parseFloat(amount).toFixed(2);
-
-      // 更新姓名（脱敏处理）
-      const nameEl = document.getElementById('maskedName');
-      const rawName = orderData.bank_user || '';
-      nameEl.dataset.name = rawName;
-      if (rawName && rawName.length > 2) {
-        const masked = rawName.replace(/(?<=.).(?=.)/g, '*');
-        nameEl.textContent = masked;
-      } else {
-        nameEl.textContent = rawName || '--';
-      }
-    }
-
-    // 显示错误信息
-    function showError(message) {
-      const loadingEl = document.getElementById('loadingInfo');
-      const errorEl = document.getElementById('errorInfo');
-      const orderInfoEl = document.getElementById('orderInfo');
-      
-      loadingEl.style.display = 'none';
-      errorEl.style.display = 'block';
-      errorEl.textContent = message;
-      orderInfoEl.style.display = 'none';
+    // 姓名掩码
+    function maskName(raw) {
+      if (!raw) return "";
+      return raw.length > 2 ? raw.replace(/(?<=.).(?=.)/g, "*") : raw;
     }
 
     // 复制文本
-    function copyText(text) {
-      if (!text || text === '--') {
-        alert('没有可复制的内容');
-        return;
-      }
-      
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-          alert('已复制：' + text);
-        }).catch(() => {
-          fallbackCopyText(text);
-        });
-      } else {
-        fallbackCopyText(text);
-      }
-    }
-
-    // 降级复制方法
-    function fallbackCopyText(text) {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
+    async function copyText(text) {
       try {
-        document.execCommand('copy');
-        alert('已复制：' + text);
-      } catch (err) {
-        alert('复制失败，请手动复制');
+        await navigator.clipboard.writeText(text);
+        alert("已复制：" + text);
+      } catch (e) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch(_) {}
+        document.body.removeChild(ta);
+        alert("已复制：" + text);
       }
-      document.body.removeChild(textarea);
     }
 
-    // 复制支付宝账号
-    function copyBankCard() {
-      copyText(orderData.bank_card);
-    }
+    document.addEventListener("DOMContentLoaded", () => {
+      // 渲染姓名与首字复制
+      const nameEl = document.getElementById("maskedName");
+      const rawName = nameEl.dataset.name || "";
+      nameEl.textContent = maskName(rawName);
+      document.getElementById("copyNameFirstChar").addEventListener("click", () => {
+        copyText(rawName.charAt(0) || "");
+      });
 
-    // 复制金额（去掉￥符号）
-    function copyAmount() {
-      const amount = orderData.apply_amount || 0;
-      copyText(parseFloat(amount).toFixed(2));
-    }
+      // 复制按钮
+      document.querySelectorAll("[data-copy]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const sel = btn.getAttribute("data-copy");
+          const node = document.querySelector(sel);
+          const text = node ? node.textContent.trim() : "";
+          if (text) copyText(text);
+        });
+      });
 
-    // 复制姓名首字符
-    function copyNameFirstChar() {
-      const rawName = orderData.bank_user || '';
-      if (!rawName) {
-        alert('没有可复制的内容');
-        return;
-      }
-      const firstChar = rawName.charAt(0);
-      copyText(firstChar);
-    }
-
-    // 在浏览器中打开
-    function openInBrowser() {
-      const url = window.location.href;
-      copyText(url);
-      alert("已复制链接，请在手机浏览器中粘贴打开！");
-    }
-
-    // 页面加载完成后执行
-    document.addEventListener('DOMContentLoaded', () => {
-      // 加载订单数据
-      loadOrderData();
-
-      // 检查是否在支付宝内打开
-      if (/AlipayClient/i.test(navigator.userAgent)) {
-        document.getElementById('alipayOverlay').style.display = 'flex';
+      // 在支付宝内时显示遮罩
+      if (/AlipayClient/i.test(navigator.userAgent || "")) {
+        document.getElementById("alipayOverlay").style.display = "flex";
       }
     });
   </script>

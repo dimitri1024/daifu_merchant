@@ -34,22 +34,38 @@
       <div class="step">
         <div class="step-title">第二步：复制并前往支付宝</div>
         <div class="tip">
-          1. 请依次复制上方的支付宝账号和金额<br>
+          1. 复制上方的支付宝账号和金额<br>
           2. 打开支付宝 → 点击"转账" → "转到支付宝账户"<br>
           3. 粘贴刚才复制的信息，核对收款人姓名后进行转账
         </div>
-      </div>
-
-      <div class="step">
-        <a class="alipay-btn" href="alipays://platformapi/startapp?appId=20000056">打开支付宝转账</a>
       </div>
     </div>
 
     <div v-if="showOverlay" class="overlay" @click="showOverlay = false">
       <div class="overlay-box" @click.stop>
-        <h3>请使用外部浏览器打开</h3>
-        <p>当前页面在支付宝内无法直接跳转，请点击下方按钮复制链接，在手机浏览器中打开。</p>
-        <button class="open-btn" @click="openInBrowser">复制并在浏览器中打开</button>
+        <h3>请在外部默认浏览器打开</h3>
+        <p>当前页面在支付宝内无法直接跳转。</p>
+        <p>请点击右上角 <span class="hint">⋯</span> → 选择 <span class="hint">在默认浏览器中打开</span></p>
+
+        <!-- 内置SVG引导图，无需外部图片 -->
+        <svg class="guide-svg" viewBox="0 0 820 460" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#eaf4ff"/>
+              <stop offset="1" stop-color="#ffffff"/>
+            </linearGradient>
+          </defs>
+          <rect x="20" y="60" rx="16" ry="16" width="780" height="360" fill="url(#g1)" stroke="#dbe7f5"/>
+          <rect x="20" y="60" rx="16" ry="16" width="780" height="68" fill="#108ee9"/>
+          <circle cx="760" cy="94" r="6" fill="#fff"/>
+          <circle cx="740" cy="94" r="6" fill="#fff"/>
+          <circle cx="720" cy="94" r="6" fill="#fff"/>
+          <rect x="540" y="110" width="240" height="150" rx="10" ry="10" fill="#fff" stroke="#dfe8f3"/>
+          <rect x="550" y="130" width="220" height="40" rx="8" ry="8" fill="#e8f3ff" stroke="#bcdcff"/>
+          <text x="560" y="156" font-size="18" font-weight="600" fill="#0b72c7">在默认浏览器中打开</text>
+          <path d="M690,110 C690,110 640,130 610,190" fill="none" stroke="#2b8df5" stroke-width="10"/>
+          <polygon points="610,190 640,186 628,210" fill="#2b8df5"/>
+        </svg>
       </div>
     </div>
   </div>
@@ -59,7 +75,6 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { getOrderInfoForQR } from '@/http/apis/merchant';
-import { copy } from '@/utils/common';
 import { ElMessage } from 'element-plus';
 import logoImg from './img/logo2.png';
 
@@ -75,7 +90,7 @@ export default {
     // 格式化金额
     const formattedAmount = computed(() => {
       if (!orderData.value || !orderData.value.apply_amount) return '--';
-      return '￥' + parseFloat(orderData.value.apply_amount).toFixed(2);
+      return parseFloat(orderData.value.apply_amount).toFixed(2);
     });
 
     // 脱敏姓名
@@ -127,17 +142,48 @@ export default {
       }
     };
 
-    // 复制文本
-    const copyText = (text) => {
+    // 复制文本（与 pay.html 保持一致）
+    const copyText = async (text) => {
       if (!text || text === '--') {
         ElMessage.warning('没有可复制的内容');
         return;
       }
       try {
-        copy(text);
-        ElMessage.success('已复制：' + text);
+        // 优先使用现代 Clipboard API
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+          ElMessage.success('已复制：' + text);
+        } else {
+          // 降级方案：使用 document.execCommand
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand('copy');
+            ElMessage.success('已复制：' + text);
+          } catch (e) {
+            ElMessage.error('复制失败');
+          }
+          document.body.removeChild(ta);
+        }
       } catch (err) {
-        ElMessage.error('复制失败');
+        // 如果 Clipboard API 失败，尝试降级方案
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          ElMessage.success('已复制：' + text);
+        } catch (e) {
+          ElMessage.error('复制失败');
+        }
       }
     };
 
@@ -170,13 +216,6 @@ export default {
       copyText(firstChar);
     };
 
-    // 在浏览器中打开
-    const openInBrowser = () => {
-      const url = window.location.href;
-      copyText(url);
-      ElMessage.success('已复制链接，请在手机浏览器中粘贴打开！');
-    };
-
     // 检查是否在支付宝内打开
     const checkAlipayClient = () => {
       if (/AlipayClient/i.test(navigator.userAgent)) {
@@ -203,8 +242,7 @@ export default {
       maskedName,
       copyBankCard,
       copyAmount,
-      copyNameFirstChar,
-      openInBrowser
+      copyNameFirstChar
     };
   }
 };
@@ -275,8 +313,10 @@ export default {
 .info-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 10px 0;
   border-bottom: 1px dashed #eee;
+  gap: 10px;
   
   &:last-child {
     border-bottom: none;
@@ -286,8 +326,7 @@ export default {
 .label {
   color: #666;
   font-size: 15px;
-  min-width: 80px;
-  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .value {
@@ -295,9 +334,7 @@ export default {
   font-size: 16px;
   word-break: break-all;
   flex: 1;
-  margin-left: 10px;
-  margin-right: 10px;
-  text-align: left;
+  text-align: right;
 }
 
 .copy-btn {
@@ -305,9 +342,10 @@ export default {
   color: #fff;
   border: none;
   border-radius: 6px;
-  padding: 4px 12px;
+  padding: 6px 12px;
   font-size: 14px;
   cursor: pointer;
+  white-space: nowrap;
   transition: background 0.2s;
   
   &:hover {
@@ -364,50 +402,48 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
   z-index: 9999;
-  flex-direction: column;
-  text-align: center;
   padding: 20px;
 }
 
 .overlay-box {
   background: #fff;
   color: #333;
-  padding: 25px 22px;
-  border-radius: 10px;
-  max-width: 85%;
+  padding: 24px 20px;
+  border-radius: 12px;
+  width: 92%;
+  max-width: 460px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  text-align: center;
   
   h3 {
     color: #108ee9;
-    margin-bottom: 10px;
+    margin: 0 0 8px;
   }
   
   p {
-    margin: 10px 0;
+    margin: 6px 0;
+    color: #444;
+    font-size: 14px;
     line-height: 1.6;
   }
 }
 
-.open-btn {
-  background: #108ee9;
-  color: #fff;
-  border: none;
+.hint {
+  display: inline-block;
+  background: #f2f8ff;
+  color: #0b72c7;
+  padding: 2px 6px;
   border-radius: 6px;
-  padding: 10px 16px;
+  font-weight: 600;
+}
+
+.guide-svg {
+  width: 100%;
+  height: auto;
   margin-top: 12px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.2s;
-  
-  &:hover {
-    background: #0c7cd5;
-  }
-  
-  &:active {
-    background: #0a6bb8;
-  }
+  border-radius: 10px;
+  display: block;
 }
 </style>
 
