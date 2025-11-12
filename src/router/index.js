@@ -18,6 +18,14 @@ export const routes = [
     meta: {
       requiresAuth: false // 不需要登录验证
     }
+  },
+  {
+    path: '/pay/:orderId',
+    name: 'Pay',
+    component: () => import('@/views/new_qr/pay.vue'),
+    meta: {
+      requiresAuth: false // 不需要登录验证
+    }
   }
 ]
 
@@ -126,8 +134,8 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  // QR页面不需要登录验证
-  if (to.path.startsWith('/qr/')) {
+  // QR页面和Pay页面不需要登录验证
+  if (to.path.startsWith('/qr/') || to.path.startsWith('/pay/')) {
     next()
     return
   }
